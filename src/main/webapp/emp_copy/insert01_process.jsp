@@ -1,4 +1,5 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
 
 <!DOCTYPE html>
@@ -26,7 +27,7 @@
 	Statement stmt = null; // Statement 객체: SQL 쿼리 구문을 담아서 실행하는 객체 
 	
 	try{
-		String sql = "insert into emp_copy(eno, ename, job, manager, hiredate, salary, commission, dno) values("+ eno +",'"+ ename + "','" + job + "','" + manager + "','" + hiredate + "'," + salary + "," + commission + "," + dno + ")";
+		String sql = "insert into emp_copy(eno, ename, job, manager, hiredate, salary, commission, dno) values("+ eno +",'"+ ename + "','" + job + "'," + manager + ",'" + hiredate + "'," + salary + "," + commission + "," + dno + ")";
 		stmt = conn.createStatement(); // connection 객체를 통해 Statement 객체를 생성함
 		stmt.executeUpdate(sql);	// Statement를 통해서 SQL을 실행함
 			// stmt.executeUpdate(sql) : sql <== insert, update, delete

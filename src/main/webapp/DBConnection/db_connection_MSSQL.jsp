@@ -14,9 +14,7 @@
 <%
 	// 변수 초기화
 	Connection conn = null;	// DB를 연결하는 객체
-	// String driver = "oracle.jdbc.driver.OracleDriver";	// Oracle Driver에 접속하는 구문
 	String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";	// SQL Server에 접속하는 구문
-	// String url = "jdbc:oracle:thin:@localhost:1521:XE"; 	// Oracle Driver에 접속하는 구문
 	String url = "jdbc:sqlserver://localhost:1433;DatabaseName=myDB"; // SQL Server에 접속하는 구문
 	Boolean connect = false;
 	
