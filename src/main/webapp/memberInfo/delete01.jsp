@@ -4,19 +4,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert를 통한 정보 삽입</title>
+<title>delete를 통한 정보 삭제</title>
 </head>
 <body>
 
-	<form method = "post" action = insert01_process.jsp>  
+	<form method = "post" action = delete01_process.jsp>  
 	
+		<p> 삭제할 ID의 정보를 입력하십시오.
 		<p> 아이디: <input type = "text" name = "id">
 		<p> 패스워드: <input type = "password" name = "pass">
-		<p> 이름: <input type = "text" name = "name">
-		<p> 이메일: <input type = "text" name = "email">
-		<p> 도시: <input type = "text" name = "city">
-		<p> 전화번호: <input type = "text" name = "phone">
-		<p> <input type = "submit" values = "전송">
+		<p> <input type = "submit" value = "전송">
 	
 	</form>
 

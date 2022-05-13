@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>insert01_process.jsp</title>
+<title>Insert를 통한 정보 삽입</title>
 </head>
 <body>
 
@@ -23,18 +23,25 @@
 	String phone = request.getParameter("phone");
 	
 	Statement stmt = null; // Statement 객체: SQL 쿼리 구문을 담아서 실행하는 객체 
+	String sql = null; // 원래 작성은 try 문 안에 지역변수로 적어줬지만, 이렇게 전역 변수로 꺼내줄 수도 있음.
 	
 	try{
-		String sql = "insert into mbTbl(idx, id, pass, name, email, city, phone) values(seq_mbTbl_idx.nextval, '"+ id +"','"+ passwd + "','" + name + "','" + email + "','" + city + "','" + phone + "')";
+		sql = "insert into mbTbl(idx, id, pass, name, email, city, phone) values(seq_mbTbl_idx.nextval, '"+ id +"','"+ passwd + "','" + name + "','" + email + "','" + city + "','" + phone + "')";
 		stmt = conn.createStatement(); // connection 객체를 통해 Statement 객체를 생성함
 		stmt.executeUpdate(sql);	// Statement를 통해서 SQL을 실행함
 			// stmt.executeUpdate(sql) : sql <== insert, update, delete
 			// stmt.executeQuery(sql) : sql <== select 문이 오면서 결과값을 Resultset 객체로 반환함.
 			
 		out.println("테이블 삽입에 성공했습니다.");
-			
+		out.println("<p><p>");
+		//out.println(sql);
+		out.println("<p><p>");
+		
 	}catch(Exception e){
 		out.println("mbTbl 테이블에 데이터 삽입을 하지 못하였습니다. SDFG");
+		out.println(e.getMessage());
+		out.println("<br><p>"); // 이러한 식으로  html 태그 또한 찍어줄 수 있음.
+		// out.println(sql); 
 	}finally{
 		if ( stmt != null){
 			stmt.close();
@@ -48,9 +55,10 @@
 ID: <%= id %> <p>
 PASSWORD: <%= passwd %> <p>
 NAME: <%= name %> <p>
-E-MAIL: <%= email %>
+E-MAIL: <%= email %> <p>
 
-
+SQL CODE:<%=sql %> <p> <!-- html 블락에서 출력할 때. 아래 스크립트와 이 스크립트는 같은 내용임. -->
+SQL CODE: <% out.println(sql); %> <!-- jsp 블락에서 출력할 때, '='과 'out.println'이 같은 기능을 함. -->
 
 
 

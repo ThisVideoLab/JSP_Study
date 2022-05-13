@@ -34,12 +34,14 @@
 			// stmt.executeQuery(sql) : sql <== select 문이 오면서 결과값을 Resultset 객체로 반환함.
 			
 		out.println(" successfull data insulting into table");
-		out.println("");
+		out.println("<p><p>");
 			
 	}catch(Exception e){
 		out.println("data insulting failure");
-		out.println("");
-		e.fillInStackTrace();
+		out.println("<p><p>");
+		out.println(e.getMessage());
+		out.println("<p><p>");
+				
 	}finally{
 		if ( stmt != null){
 			stmt.close();
