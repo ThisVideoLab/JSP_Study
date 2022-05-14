@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>  
-  
+    pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert with oracle</title>
+<title>Update with MSSQL</title>
 </head>
 <body>
 
-	<form method = "post" action = insert01_process.jsp>  
+	<form method = "post" action = update03_process.jsp>  
 	
 		<p> eno: <input type = "text" name = "eno">
 		<p> ename: <input type = "text" name = "ename">
@@ -20,8 +20,8 @@
 		<p> commission: <input type = "text" name = "commission">
 		<p> dno: <input type = "text" name = "dno">
 		<p> <input type = "submit" values = "submit">
-		
-	</from>
+	
+	</form>
 
 </body>
 </html>

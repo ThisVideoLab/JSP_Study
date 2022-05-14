@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="EUC-KR"%>
+    pageEncoding="UTF-8"%>
     
 <%@ page import = "java.sql.*" %>
 
@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Employee tableÀÇ ³»¿ëÀ» °¡Á®¿Í¼­ Ãâ·ÂÇÏ±â</title>
+<title>PreparedStatementë¥¼ ì‚¬ìš©í•œ ì¿¼ë¦¬ ì‹¤í–‰</title>
 </head>
 <body>
 
@@ -26,12 +26,15 @@
 </tr>
 
 <%
-	ResultSet rs = null; // ResultSet °´Ã¼´Â dbÀÇ Å×ÀÌºíÀ» select ÇØ¼­ ³ª¿Â °á°ú ·¹ÄÚµåµéÀ» ¸ð¾Æ ´ã´Â °´Ã¼ 
-	Statement stmt = null; // sql Äõ¸®¸¦ ´ã¾Æ¼­ ½ÇÇàÇÏ´Â °´Ã¼
+	ResultSet rs = null; // ResultSet ê°ì²´ëŠ” dbì˜ í…Œì´ë¸”ì„ select í•´ì„œ ë‚˜ì˜¨ ê²°ê³¼ ë ˆì½”ë“œë“¤ì„ ëª¨ì•„ ë‹´ëŠ” ê°ì²´ 
+	// Statement stmt = null; // ì¼íšŒìš© ê°ì²´
+	PreparedStatement pstmt = null;
 	try{
 		String sql = "select * from emp_copy";
-		stmt = conn.createStatement(); // connection °´Ã¼¿¡¼­ createStatement()·Î stmt¸¦ È°¼ºÈ­ 
-		rs = stmt.executeQuery(sql);
+		pstmt = conn.prepareStatement(sql); // preparedStatement ê°ì²´ ìƒì„±ì‹œì—ëŠ” ë°”ë¡œ sqlë¥¼ ë„£ì–´ì¤Œ. ì´ëŠ” statementë¥¼
+											// nullë¡œ ìƒì„±í•  ìˆ˜ ìžˆëŠ” ê²ƒê³¼ ëŒ€ì¡°ë¨.
+		rs = pstmt.executeQuery(sql);
+
 		while(rs.next()){
 			Integer eno = rs.getInt("eno");
 			String ename = rs.getString("ename");
@@ -57,21 +60,20 @@
 		
 	}catch(Exception ex)   {
 		
-		out.println("Å×ÀÌºíÀ» È£ÃâÇÏÁö ¸øÇß½À´Ï´Ù.");
+		out.println("í…Œì´ë¸”ì„ í˜¸ì¶œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 		out.println(ex.getMessage());
 		
 	}finally{
 		if ( rs != null){
 			rs.close();
 		}
-		if ( stmt != null){
-			stmt.close();
+		if ( pstmt != null){
+			pstmt.close();
 		}
 		if ( conn != null){
 			conn.close();
 		}
 	}
-	
 %>
 
 </table>

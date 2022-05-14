@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<%@ include file = "db_connection_oracle.jsp"  %>
+<%@ include file = "db_connection_MSSQL.jsp"  %>
 
 <table width = "1000" border = "1">
 <tr>
@@ -41,8 +41,8 @@
 			Double salary = rs.getDouble("salary");
 			Double commission = rs.getDouble("commission");
 			Integer dno = rs.getInt("dno");
-%>
-		<tr>
+			%>
+			<tr>
 			<td><%= eno %></td>
 			<td><%= ename %></td>
 			<td><%= job %></td>
@@ -52,7 +52,7 @@
 			<td><%= commission %></td>
 			<td><%= dno %></td>
 		</tr>
-<%
+		<%
 		}
 		
 	}catch(Exception ex)   {
@@ -71,6 +71,9 @@
 			conn.close();
 		}
 	}
+
+	
+	
 	
 %>
 
