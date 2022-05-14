@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<%@ include file = "db_connection_oracle.jsp"  %>
+<%@ include file = "db_connection_mySQL.jsp"  %>
 
 <table width = "1000" border = "1">
 <tr>

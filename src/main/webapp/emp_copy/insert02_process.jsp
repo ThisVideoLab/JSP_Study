@@ -1,4 +1,4 @@
-      <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
 
@@ -6,11 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert with oracle</title>
+<title>Insert with MySQL</title>
 </head>
 <body>
 
-<%@ include file = "db_connection_oracle.jsp" %>  <!--dbconn_oracle.jsp   파일의 코드를 그대로 내포 -->
+<%@ include file = "db_connection_mySQL.jsp" %>  <!--dbconn_oracle.jsp   파일의 코드를 그대로 내포 -->
 
 <%  
 	request.setCharacterEncoding("UTF-8"); // 폼에서 넘긴 한글을 처리하기 위한 구문

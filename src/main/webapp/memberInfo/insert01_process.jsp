@@ -16,7 +16,7 @@
 	request.setCharacterEncoding("UTF-8"); // 폼에서 넘긴 한글을 처리하기 위한 구문
 	
 	String id = request.getParameter("id");
-	String passwd = request.getParameter("pass");
+	String pass = request.getParameter("pass");
 	String name = request.getParameter("name"); 
 	String email = request.getParameter("email");
 	String city = request.getParameter("city");
@@ -26,7 +26,7 @@
 	String sql = null; // 원래 작성은 try 문 안에 지역변수로 적어줬지만, 이렇게 전역 변수로 꺼내줄 수도 있음.
 	
 	try{
-		sql = "insert into mbTbl(idx, id, pass, name, email, city, phone) values(seq_mbTbl_idx.nextval, '"+ id +"','"+ passwd + "','" + name + "','" + email + "','" + city + "','" + phone + "')";
+		sql = "insert into mbTbl(idx, id, pass, name, email, city, phone) values(seq_mbTbl_idx.nextval, '"+ id +"','"+ pass + "','" + name + "','" + email + "','" + city + "','" + phone + "')";
 		stmt = conn.createStatement(); // connection 객체를 통해 Statement 객체를 생성함
 		stmt.executeUpdate(sql);	// Statement를 통해서 SQL을 실행함
 			// stmt.executeUpdate(sql) : sql <== insert, update, delete
@@ -53,7 +53,7 @@
 %>
 
 ID: <%= id %> <p>
-PASSWORD: <%= passwd %> <p>
+PASSWORD: <%= pass %> <p>
 NAME: <%= name %> <p>
 E-MAIL: <%= email %> <p>
 

@@ -1,4 +1,4 @@
-      <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
 
@@ -6,11 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert with oracle</title>
+<title>Insert with MSSQL</title>
 </head>
 <body>
 
-<%@ include file = "db_connection_oracle.jsp" %>  <!--dbconn_oracle.jsp   파일의 코드를 그대로 내포 -->
+<%@ include file = "db_connection_MSSQL.jsp" %>  <!--dbconn_oracle.jsp   파일의 코드를 그대로 내포 -->
 
 <%  
 	request.setCharacterEncoding("UTF-8"); // 폼에서 넘긴 한글을 처리하기 위한 구문
@@ -28,13 +28,12 @@
 	
 	try{
 		String sql = "insert into emp_copy(eno, ename, job, manager, hiredate, salary, commission, dno) values("+ eno +",'"+ ename + "','" + job + "'," + manager + ",'" + hiredate + "'," + salary + "," + commission + "," + dno + ")";
-		stmt = conn.createStatement(); // connection 객체를 통해 Statement 객체를 생성함
-		stmt.executeUpdate(sql);	// Statement를 통해서 SQL을 실행함
-			// stmt.executeUpdate(sql) : sql <== insert, update, delete
-			// stmt.executeQuery(sql) : sql <== select 문이 오면서 결과값을 Resultset 객체로 반환함.
-			
+		stmt = conn.createStatement();
+		stmt.executeUpdate(sql);
+		
 		out.println(" successfull data insulting into table");
 		out.println("<p><p>");
+		out.println(sql);
 			
 	}catch(Exception e){
 		out.println("data insulting failure");
@@ -50,6 +49,7 @@
 			conn.close();
 		}
 	}
+	out.println("<p><p>");
 %>
 
 employee number: <%= eno %> <p>

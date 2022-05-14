@@ -10,24 +10,25 @@
 </head>
 <body>
 
-<%@ include file = "db_connection_oracle.jsp" %>  <!--dbconn_oracle.jsp   파일의 코드를 그대로 내포 -->
+<%@ include file = "db_connection_oracle.jsp" %>
 
 <%  
-	request.setCharacterEncoding("UTF-8"); // 폼에서 넘긴 한글을 처리하기 위한 구문
+	request.setCharacterEncoding("UTF-8");
 	
 	String id = request.getParameter("id");
 	String pass = request.getParameter("pass");
 	
-	Statement stmt = null; // Statement 객체: SQL 쿼리 구문을 담아서 실행하는 객체
+	PreparedStatement pstmt = null; //
 	ResultSet rs = null;
 	String sql = null; // 원래 작성은 try 문 안에 지역변수로 적어줬지만, 이렇게 전역 변수로 꺼내줄 수도 있음.
 	
 	
 	try{
 		// 레코드 삭제, 폼에서 넘긴 ID와 PASSWORD와 DB에 있는 ID와 PASSWORD가 일치할 때 레코드 제거, id(Primary key 컬럼)
-		sql = "select id, pass from mbTbl where id = '" + id + "'";
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(sql);
+		sql = "select id, pass from mbTbl where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1,id);
+		rs = pstmt.executeQuery();
 		
 		if (rs.next()){ // ID가 존재할 때
 			//rs 결과의 레코드를 변수에 할당함
@@ -36,8 +37,11 @@
 			
 			// 할당된 변수값들을 가지고 패스워드가 일치하는지 확인
 			if(pass.equals(rs_pass)){ // 폼에서 받은 password와 DB에 담긴 password가 일치한다면
-				sql = "delete mbTbl where id = '" + id + "'";
-				stmt.executeQuery(sql); // executeQuery 와 executeUpdate 모두 가능함. 다만 리턴값에 차이가 있음
+				sql = "delete mbTbl where id = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1,id);
+				pstmt.executeUpdate(); // stmt.executeQuery(sql); 
+				
 				out.println("테이블에서 " + id + " ID가 성공적으로 삭제되었습니다.");
 				out.println("<BR><BR>");
 				out.println("SQL CODE: " + sql);
@@ -54,8 +58,8 @@
 		out.println("<br><p>"); // 이러한 식으로  html 태그 또한 찍어줄 수 있음.
 		out.println("실행된 SQL CODE: " + sql); 
 	}finally{
-		if ( stmt != null){
-			stmt.close();
+		if ( pstmt != null){
+			pstmt.close();
 		}
 		if ( conn != null){
 			conn.close();
