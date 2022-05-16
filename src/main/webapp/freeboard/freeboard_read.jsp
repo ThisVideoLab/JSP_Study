@@ -101,14 +101,25 @@
 			   out.println("</tr>");
 			   out.println("</table>");
 			  %>
-		
-	  <table width="600" border="0" cellpadding="0" cellspacing="5" align="center">
+	  <table width="220" border="0" cellpadding="0" cellspacing="5" align="center">
 	  <tr> 
-	  <td align="right" width="450"><A href="freeboard_list.jsp?go=<%=request.getParameter("page") %>"> 
+	  
+	  <td align="right" width="50" >
+	  <A href="freeboard_list.jsp?go=<%=request.getParameter("page") %>"> 
 	  <img src="image/list.jpg" border=0></a></td>
-	  <td width="70" align="right"><A href="freeboard_rwrite.jsp?id=<%= request.getParameter("id")%>&page=<%=request.getParameter("page")%>"> <img src="image/reply.jpg" border=0></A></td>
-	  <td width="70" align="right"><A href="freeboard_upd.jsp?id=<%=id%>&page=1"><img src="image/edit.jpg" border=0></A></td>
-	  <td width="70" align="right"><A href="freeboard_del.jsp?id=<%=id%>&page=1"><img src="image/del.jpg"  border=0></A></td>
+	  
+	  <td align="right" width="50">
+	  <A href="freeboard_rwrite.jsp?id=<%= request.getParameter("id")%>&page=<%=request.getParameter("page")%>"> 
+	  <img src="image/reply.jpg" border=0></A></td>
+	  
+	  <td align="right" width="50" >
+	  <A href="freeboard_upd.jsp?id=<%=id%>&page=1">
+	  <img src="image/edit.jpg" border=0></A></td>
+	  
+	  <td align="right" width="50">
+	  <A href="freeboard_del.jsp?id=<%=id%>&page=1">
+	  <img src="image/del.jpg"  border=0></A></td>
+	  
 	  </tr>
 	  </table>
 	  <%    

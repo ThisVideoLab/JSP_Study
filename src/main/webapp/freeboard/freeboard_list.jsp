@@ -42,7 +42,7 @@
   <tr align="center" bgcolor="#87E8FF"> 
    <td width="42" bgcolor="#DFEDFF"><font size="2">번호</font></td>
    <td width="340" bgcolor="#DFEDFF"><font size="2">제목</font></td>
-   <td width="84" bgcolor="#DFEDFF"><font size="2">등록자</font></td>
+   <td width="84" bgcolor="#DFEDFF"><font size="2">닉네임</font></td>
    <td width="78" bgcolor="#DFEDFF"><font size="2">날짜</font></td>
    <td width="49" bgcolor="#DFEDFF"><font size="2">조회</font></td>
   </tr>
@@ -65,32 +65,38 @@
   
   
   
-  int where=1;
-  int totalgroup=0;		//출력할페이징의 그룹핑의 최대 갯수
-  int maxpages=2;		//최대 페이지 갯수 하단 처음~ 마지막 해서 넘기는 페이지들 뜨는 곳에서 현재 페이지를 중심으로 앞뒤로 최대 몇개의
-  							// 페이지를 표시할 것인지를 결정할 수 있음. 
-  int startpage=2;		// 처음 리스트 주소로 기본적으로 접속했을 때, 기준이 되는 페이지의 넘버, 이 숫자는 처음 버튼 바로 옆 가장 왼쪽에 표시됨 
-  int endpage=startpage+maxpages-1;	//마지막 페이지
+  int where=1; // 현재 위치하는 페이지의 위치
+  int maxpages=3;		// 최대 페이지 갯수. 하단 처음과 마지막 버튼이 있어서 페이지를 넘길수 있는 부분에 표시되는 숫자로된 페이지들이 있음
+  						// 그 페이지들을 몇개 표시할 것이냐를 결정하는 부분임. 별도의 설정없는 default 값으론 현재 페이지 n이 가장 앞에 오며
+  						// maxpage = a 일때 표시되는 페이지의 가장 높은 값은 n+a-1 이 됨
+  int totalgroup=0;		// 해당 게시판의 전체 그룹수, 이코드에선 그냥 default값인 0으로 잡아서 선언만 해둠 
+   						// 전체 페이지를 maxpage로 나눠서 올림한 값이 해당 게시판의 토탈그룹이 됨.
+  int startpage=1;		// 처음 페이지의 숫자. 2라고 적으면 페이지의 넘버링이 1이 아닌 2부터 시작됨. 
+  int endpage=startpage+maxpages-1;	//마지막 페이지 1만큼 빼주는 것이 포인트.
   int wheregroup=1;		//현재 위치하는 그룹
 	
+  /*
   
-  	//go : 해당 페이지 번호로 이동.
-  	//freeboard_list.jsp?go=3
+  	go : 특정 페이지 번호로 이동.
+  	예시) freeboard_list.jsp?go=3 -> 3페이지로 이동
   	
-  	//gogroup : 출력할 페이지의 그룹핑
-	//freeboard_list.jsp?gogroup=2
+  	gogroup : 그룹이란 페이지를 엮는 단위로, 만약 10페이지가 있는 게시판에서 그룹을 2로 정했다면 총 5개의 페이지 그룹이 존재하게 됨.
+  			  보통 페이지를 XX1부터 XX0까지 10개로 묶고, 다음이나 이전 버튼을 누르면 10개 단위씩 이동을하는데, 이때 이 10개 단위로 넘어가는
+  			  것이 바로 그룹에 해당함. 고로 최대 페이지 갯수 maxpage에 따라 그룹별로 배정되는 페이지들이 달라짐.
+  	예시) freeboard_list.jsp?gogroup=2
 	
+  */
 	//go 변수를 (페이지 번호) 를 넘겨 받아서 wheregroup, startpage, endpage 정보의 값을 알아낸다
   if (request.getParameter("go") != null) {	//go 변수의 값을 가지고 있을때
    where = Integer.parseInt(request.getParameter("go"));	//현재 페이지 번호를 담은 변수
-   wheregroup = (where-1)/maxpages + 1;						//현재 위치한 페이지의 그룹
+   wheregroup = (where-1)/maxpages + 1;						//현재 내가 위치한 페이지의 그룹
    startpage=(wheregroup-1) * maxpages+1;  
    endpage=startpage+maxpages-1; 
    
  	//gogroup 변수를 넘겨 받아서 startpage, endpage , where(페이지 그룹의 첫번째 페이지)
   } else if (request.getParameter("gogroup") != null) {	//gogroup 변수의 값을 가지고 올때
-   wheregroup = Integer.parseInt(request.getParameter("gogroup"));
-   startpage=(wheregroup-1) * maxpages+1;  
+   wheregroup = Integer.parseInt(request.getParameter("gogroup")); //현재 페이지 번호를 담은 변수
+   startpage=(wheregroup-1) * maxpages+1;  // 현재 위치한 페이지의 그룹
    where = startpage ; 
    endpage=startpage+maxpages-1; 
   }
@@ -98,8 +104,8 @@
   int priorgroup= wheregroup-1;	//이전 그룹: 현재 그룹 - 1
   int nextpage=where+1;			//다음페이지 : 현재페이지 +1
   int priorpage = where-1;		//이전페이지 : 현재페이지 -1
-  int startrow=0;				//해당페이지에 SELECT 한 레코드 시작 번호
-  int endrow=0;					//해당페이지에 SELECT 한 레코드 마지막 번호
+  int startrow=0;				//해당페이지에 SELECT 한 레코드 시작 번호, 일단 기본값을 0으로 넣어둠, 뒤에 실행되면서 자동할당됨.
+  int endrow=0;					//해당페이지에 SELECT 한 레코드 마지막 번호, 일단 기본값을 0으로 넣어둠, 뒤에 실행되면서 자동할당됨.
   int maxrows=5; //출력할 레코드 수 : 한 페이지당 몇개의 글들을 표시해줄 것인가를 결정함. 만약 10이면 한 페이지당 10개의 글이 뜸
   int totalrows=0;
   int totalpages=0;
@@ -166,9 +172,8 @@
   } else {
    do {
 	 //DB의 값을 가져와서 각각의 vector에 저장
-    keyid.addElement(new Integer(rs.getInt("id")));
-  		//rs에 ID컬럼의 값을 가져와서 vecotr에 저장
-    name.addElement(rs.getString("name"));
+    keyid.addElement(new Integer(rs.getInt("id"))); // 가져온 로우값 묶음 rs에서 id컬럼의 값을 빼서 keyid 벡터에 저장함
+    name.addElement(rs.getString("name"));// 
     email.addElement(rs.getString("email"));
     String idate = rs.getString("inputdate");
     idate = idate.substring(0,8);
@@ -207,13 +212,17 @@
    out.println("마지막 레코드 : " + endrow +"<p>");
    out.println("토탈 페이지 그룹 : " + totalpages +"<p>");
 */
-   for(int j=startrow;j<=endrow;j++) {
-    String temp=(String)email.elementAt(j);
-    if ((temp == null) || (temp.equals("")) ) 
-     em= (String)name.elementAt(j); 
-    else
-     em = "<A href=mailto:" + temp + ">" + name.elementAt(j) + "</A>";
+
+	// 현재페이지에서 시작 레코드, 마지막 레코드까지 순환하면서 출력해줌
+	for(int j=startrow;j<=endrow;j++) {
+    	String temp=(String)email.elementAt(j); // email vector에서 email 주소를 가져옴. 이때 startorw에 대한 email을 가져옴.
+    	if ((temp == null) || (temp.equals(""))) 
+     	em= (String)name.elementAt(j); 
+    	else
+     	em = "<A href=mailto:" + temp + ">" + name.elementAt(j) + "</A>";
+     
     id= totalrows-j;
+        
     if(j%2 == 0){
      out.println("<TR bgcolor='#FFFFFF' onMouseOver=\" bgColor= '#DFEDFF'\" onMouseOut=\"bgColor=''\">");	
     } else {
@@ -264,11 +273,11 @@
  } catch (java.sql.SQLException e) {
   out.println(e);
  } 
- if (wheregroup > 1) {	//현재 나의 그룹이 1 이상일때는
-  out.println("[<A href=freeboard_list.jsp?gogroup=1>처음</A>]"); 
+ if (wheregroup > 1) {	//현재 나의 그룹이 1 보다 클 때, 즉 2 이상일때는 이전 버튼을 눌러서 앞 순번 그룹으로 넘어갈 수 있어서 활성화가 됨
+  out.println("[<A href=freeboard_list.jsp?gogroup=1>처음</A>]"); // 
   out.println("[<A href=freeboard_list.jsp?gogroup="+priorgroup +">이전</A>]");
   
- } else {				//현재 나의 그룹이 1 이상이 아닐때
+ } else { //현재 나의 그룹이 1일때는, 내 앞의 그룹이 없기 때문에 이전과 처음이 비활설화되어 링크가 사라짐
   out.println("[처음]") ;
   out.println("[이전]") ;
  }
@@ -280,14 +289,13 @@
     out.println("[<A href=freeboard_list.jsp?go="+jj+">" + jj + "</A>]") ;
    } 
   }
-  if (wheregroup < totalgroup) {
+  if (wheregroup < totalgroup) { // 현재 그룹이 총 그룹수보다 작은 경우, 즉 내 그룹 뒤에 다른 그룹이 있는 경우는 넘길수 있어서 활성화
    out.println("[<A href=freeboard_list.jsp?gogroup="+ nextgroup+ ">다음</A>]");
    out.println("[<A href=freeboard_list.jsp?gogroup="+ totalgroup + ">마지막</A>]");
-  } else {
+  } else { // wheregroup = totalgroup 인 경우 즉 현재 그룹이 마지막 그룹인 경우엔 더이상 뒤로갈 수 없어서 비활성화
    out.println("[다음]");
    out.println("[마지막]");
-  }
-  out.println ("전체 글수 :"+totalrows); 
+  } 
  %>
 <!--<TABLE border=0 width=600 cellpadding=0 cellspacing=0>
  <TR>
@@ -302,13 +310,13 @@
  <TR>
   <TD align=right width="241"> 
    <SELECT name=stype >
-    <OPTION value=1 >이름
+    <OPTION value=1 >닉네임
     <OPTION value=2 >제목
     <OPTION value=3 >내용
-    <OPTION value=4 >이름+제목
-    <OPTION value=5 >이름+내용
+    <OPTION value=4 >닉네임+제목
+    <OPTION value=5 >닉네임+내용
     <OPTION value=6 >제목+내용
-    <OPTION value=7 >이름+제목+내용
+    <OPTION value=7 >닉네임+제목+내용
    </SELECT>
   </TD>
   <TD width="127" align="center">
@@ -319,5 +327,6 @@
  </TR>
 </TABLE>
 </FORM>
+  
 </BODY>
 </HTML>
