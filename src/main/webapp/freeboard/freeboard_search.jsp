@@ -23,11 +23,12 @@
      <SELECT name=stype >
 <% 
  String cond = null;
- int what = 1;
- String val=null;  
+ int what = 1; // what: stype에서 넘긴 변수를 받아서 가지고 있음.
+ 			   // 1< 이름, 2>제목, 3>내용, 4> 이름+제목, 5>이름+내용, 7>제목+내용
+ String val=null; // 검색할 단어를 저장하는 변수  
  if (request.getParameter("stype") != null) {
-  what = Integer.parseInt(request.getParameter("stype"));
-  val= request.getParameter("sval");
+  what = Integer.parseInt(request.getParameter("stype")); // 폼에서 넘어온 검색 타입 stype을 받아서 what에 담아 옵션별 검색 실행
+  val= request.getParameter("sval"); // 폼에서 넘어온 검색어 sval을 val 변수에 담아서 활용함
   if (what==1) {
    out.println("<OPTION value=1 selected>이름");
    cond = " where name like '%"+ val+ "%'";

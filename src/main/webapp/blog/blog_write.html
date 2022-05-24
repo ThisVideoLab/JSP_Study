@@ -1,8 +1,15 @@
 <HTML>                                         
 <HEAD>                                       
-<SCRIPT language="javascript">                              
+<SCRIPT language="javascript">
+date = new Date().toLocaleDateString().replace(/\./g, "");
+year = date.getFullYear();
+month = date.getMonth() + 1;
+day = date.getDate();
+document.getElementById("current_date").innerHTML = year+month+day;
+
 function check(){                                         
- with(document.msgwrite){                      
+ with(document.msgwrite){
+  
   if(subject.value.length == 0){ // 만약 subject라는 객체의 값의 길이가 0이라면, 즉 제목이 없다면  
    alert("제목을 입력해 주세요!!");                       
    subject.focus();                           
@@ -12,33 +19,31 @@ function check(){
    alert("닉네임을 입력해 주세요!!");                 
    name.focus();                              
    return false;                                  
-  }                                         
-  if(password.value.length == 0){ //만약 password라는 객체의 값의 길이가 0이라면, 즉 비밀번호를 입력하지 않았다면
-   alert("비밀번호를 입력해 주세요!!");              
-   password.focus();                            
-   return false;                               
-  }                                        
+  }                                                                          
   if(content.value.length == 0){                    
    alert("내용을 입력해주세요!!");                   
    content.focus();                         
    return false;                           
   }                                        
-  document.msgwrite.submit();  //submit하면 form 형식의 action="freeboard_save.jsp"을 실행해 글을 저장함.           
+  document.msgwrite.submit();  //submit하면 form 형식의 action="freeboard_save.jsp"을 실행해 값들을 저장 페이지로 넘김.           
  }                                          
 }                                            
 </SCRIPT>                                    
-<link href="filegb.css" rel="stylesheet" type="text/css">   
+<link href="filegb.css" rel="stylesheet" type="text/css">  
 </HEAD>                                       
-<BODY>                                        
-<P>                                           
-<FORM name="msgwrite" method="post" action="freeboard_save.jsp">    
+<BODY>  
+                                    
+<br><br> <!-- 위가 답답해서 2줄 추가 -->                                  
+<FORM name="msgwrite" method="post" action="blog_save.jsp">
+    
 <CENTER>                                      
 <table width="600"cellspacing="0" cellpadding="2">           
+ <tr></tr> <!-- 화면 최상단에 바로 붙어서 한줄 띄어쓰기용 테이블 로우 추가 -->
  <tr>                                        
   <td colspan="2" bgcolor="#1F4F8F" height="1"></td>  
  </tr>                                        
  <tr>                                        
-  <td colspan="2" bgcolor="#DFEDFF" height="20" class="notice">&nbsp;&nbsp;<font size="2">새글 쓰기</font></td> 
+  <td colspan="2" bgcolor="#DFEDFF" height="20" class="notice">&nbsp;&nbsp;<font size="2">새 방명록 쓰기</font></td> 
  </tr>                                       
  <tr>                                       
   <td colspan="2" bgcolor="#1F4F8F" height="1"></td>   
@@ -62,12 +67,6 @@ function check(){
    <!-- cols -> columns : 최대 65자까지 작성 가능 / rows -> 1줄까지 작성 가능 -->     
   </td>                                     
  </tr>                                        
- <tr>                                        
-  <td width="124" align="center"  bgcolor="#f4f4f4">암 호</td>  
-  <td width="494" style="padding:0 0 0 10" height="25">                   
-   <input type=password name=password class="style1"><br>(비밀번호를 입력하면 수정 또는 삭제가 가능합니다.)
-  </td>                                       
- </tr>                                       
  <tr>                                       
   <td colspan="2" height="1" class='button'></td>                                  
  </tr>                                       
@@ -85,14 +84,13 @@ function check(){
      <td width="51%">&nbsp;</td>                
      <td width="12%"><a href="#" onClick="history.go(-1)"><img src="image/cancle.gif" width="46" height="20" border="0"></td>
      <td width="9%"><a href="#" onClick="check();"><img src="image/ok.gif" width="46" height="20" border="0"></a></td>
-     <!-- onclick.go(-1) -> img src="image/cancle.gif : 클릭에 대하여 이전 단계로 돌아가라 
-          onClick="check() -> img src="image/ok.gif : ok를 클릭하면 check 펑션을 활성화시켜서 필요한 입력값을 체크함.
      
-     
-     -->
     </tr>
    </table>
   </td>
+ </tr>
+ <tr>
+ 
  </tr>
 </table>                                       
 </CENTER>                                            

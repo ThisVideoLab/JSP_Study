@@ -20,10 +20,10 @@
   cont = cont+" " ;
  
  
- //textarea 내에 ' 가들어가면 DB에 insert, update시 문제 발생
+ // textarea 내에 ' 가들어가면 DB에 insert, update시 문제 발생
+ // 그래서 ' 문제를 해결하기 위한 별도의 구문이 필요함
  
- 
-  while ((pos=cont.indexOf("\'", pos)) != -1) {
+  while ((pos=cont.indexOf("\'", pos)) != -1) { // 여기서 역슬레쉬 \를 통해서 
    String left=cont.substring(0, pos);
    String right=cont.substring(pos, cont.length());
    cont = left + "\'" + right;

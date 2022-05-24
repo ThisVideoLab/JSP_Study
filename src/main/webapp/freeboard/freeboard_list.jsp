@@ -119,85 +119,77 @@
   Statement st =null;
   ResultSet rs =null;
  try {
-  st = conn.createStatement();
-   
-//답변글이 존재하는 테이블을 출력 할때는 다음과 같은 방식으로 정렬을 해야 답변글의 순서가 꼬이지 않고 나온다.
- String sql = "select * from freeboard order by" ;
- sql = sql + " masterid desc, replynum, step, id" ;
+ 	st = conn.createStatement();
+	
+ 	//답변글이 존재하는 테이블을 출력 할때는 다음과 같은 방식으로 정렬을 해야 답변글의 순서가 꼬이지 않고 나온다.
+ 	String sql = "select * from freeboard order by" ;
+ 	sql = sql + " masterid desc, replynum, step, id" ;
   
-  /* 왜 위의 정렬 순서를 따라야 하는가에 대한 답번.
-  
-  위의 코드를 이해하기 앞서 먼저 답변글 기능이 있는 게시판의 정렬을 위해 필요한 3요소인 masterid, replynum, step 3신기에 대한 이해가 요구된다. 
-   
-  id컬럼 : 새로운 글이 등록될때 기존의 id컬럼의 최대값을 가져와서 +1 후에 값을 할당, 새글 번호에 넘버링해줌. 보통 우리가 아는 글번호.
-  	      다만 아무것도 없을때, 즉 아무 글도 없는 조건에서는 그냥 1을 부여해줌. 그래야 게시가 되니까. 이게 가장 기초적인 게시판 글의 변수.
-  
-  masterid	: 마스터id는, 하나의 글에 대한 답글,답답글들이 연속으로 달릴 경우에, 원글의 아이디를 아래답글들이 똑같이 부여받는데,
-  			  이를 일컬어 마스터ID라고 칭함. 마스터ID는 글 및 답글을 한 세트로 묶어서 편하게 관리하도록 도와줌.
-  			  가령 6번글을 다른 글 밑에 달지 않고 오롯이 그냥 작성한 글이라고 해보자. 이녀석은 주체적인 녀석이기 때문에
-  			  할당받은 ID 넘버 6번이 곧 자신의 아이디가 된다. 그런데 이 6번글에 연속으로 답변글을 달면, 표면적으로는 답변글의
-  			  ID는 7로 할당이 되지만, 마스터ID는 종속관계의 상위 개체인 6번의 ID를 물려받는 것이다. 마찬가지로 바로 밑에 달리는
-  			  답답글은 ID 8번을 부여받게 되고, MASTER ID는 이러한 구조의 최상단에 있는 ID 6번의 ID를 그대로 받는다는 것.
-  
-  step: 답변글의 깊이, 보통 게시판에선 답변글은 들여쓰기를 해서 표시하는데, 이를 착안해 step이라고 표현함.
-  		잘 살펴보면 마치 계단처럼 답글, 답답글, 답답답글마다 계단처럼 들여쓰기가 반복됨을 발견할 수 있다.
-		step 0 :처음글 (자신의 글, 답변x)
-		step 1 :답글
-		step 2 :답답글
-		step 3 :답답답글
-  			  
-  replyNum	: 같은 step level에 해당하는 글들의 작성 순서를 보여주는 기능이다. 가장 먼저 작성된 글이 1이며, 최신글일수록 더 큰값을 지님. 
-  			 
-  step과 relpynum의 관계: 가령 예를 들어서 내가 정보글을 쓴 후에, 타인이 답글과 답답글이 달았다고 해보자. 그렇다면 원글은 step 0, 답글은 step1,
-  					   답답글은 step2의 값을 가지게 된다. 이때 다시금 내가 원글에 답글을 달려고하면 나의 답글은 원글 step 0에 +1을 한 값으로
-  					   step 1을 지닌다. 나의 답글은 타인의 답글보다 늦게 작성되었으므로, 후순위로 밀려야하는데, 이 후순위를 replynum으로
-  					   확인할 수 있다. 높을수록 더 최신에 작성된 글이다.
-  	
-  답변글 처리 주의점: 답변글을 처리하는 컬럼이 3개 필요하다.(masterid, replynum, step))
- 				 masterid 컬럼에 중복된 값이 있을 경우, replynum컬럼을 asc
-				 replynum이 중복된 값이 존재할때 step asc
-				 step이 중복된 값이 존재할때 id asc
-   				 라고 설명해주셨지만 결국 masterid를 desc로 묶어서 인접하도록 정렬한 후에, step과 replynum으로 위에서 설명한 목적을 위해
-   				 정렬해주면 된다. 그럼 왜 masterid는 desc냐고? 그래야 최신 글이 가장 위로 오기 때문이다
-  				  
+	/* 왜 위의 정렬 순서를 따라야 하는가에 대한 답번.
+	
+	위의 코드를 이해하기 앞서 먼저 답변글 기능이 있는 게시판의 정렬을 위해 필요한 3요소인 masterid, replynum, step 3신기에 대한 이해가 요구된다. 
+	   
+	id컬럼 : 새로운 글이 등록될때 기존의 id컬럼의 최대값을 가져와서 +1 후에 값을 할당, 새글 번호에 넘버링해줌. 보통 우리가 아는 글번호.
+	        다만 아무것도 없을때, 즉 아무 글도 없는 조건에서는 그냥 1을 부여해줌. 그래야 게시가 되니까. 이게 가장 기초적인 게시판 글의 변수.
+	  
+	masterid : 마스터id는, 하나의 글에 대한 답글,답답글들이 연속으로 달릴 경우에, 원글의 아이디를 아래답글들이 똑같이 부여받는데,
+	  		   이를 일컬어 마스터ID라고 칭함. 마스터ID는 글 및 답글을 한 세트로 묶어서 편하게 관리하도록 도와줌.
+	  		   가령 6번글을 다른 글 밑에 달지 않고 오롯이 그냥 작성한 글이라고 해보자. 이녀석은 주체적인 녀석이기 때문에
+	  		   할당받은 ID 넘버 6번이 곧 자신의 아이디가 된다. 그런데 이 6번글에 연속으로 답변글을 달면, 표면적으로는 답변글의
+	  		   ID는 7로 할당이 되지만, 마스터ID는 종속관계의 상위 개체인 6번의 ID를 물려받는 것이다. 마찬가지로 바로 밑에 달리는
+	  		   답답글은 ID 8번을 부여받게 되고, MASTER ID는 이러한 구조의 최상단에 있는 ID 6번의 ID를 그대로 받는다는 것.
+	  
+	step: 답변글의 깊이, 보통 게시판에선 답변글은 들여쓰기를 해서 표시하는데, 이를 착안해 step이라고 표현함.
+	      잘 살펴보면 마치 계단처럼 답글, 답답글, 답답답글마다 계단처럼 들여쓰기가 반복됨을 발견할 수 있다.
+		  step 0 :처음글 (자신의 글, 답변x)
+		  step 1 :답글
+		  step 2 :답답글
+		  step 3 :답답답글
+	  			  
+	replyNum : 같은 step level에 해당하는 글들의 작성 순서를 보여주는 기능이다. 가장 먼저 작성된 글이 1이며, 최신글일수록 더 큰값을 지님. 
+	  			 
+	step과 relpynum의 관계: 가령 예를 들어서 내가 정보글을 쓴 후에, 타인이 답글과 답답글이 달았다고 해보자. 그렇다면 원글은 step 0, 답글은 step1,
+	 					 답답글은 step2의 값을 가지게 된다. 이때 다시금 내가 원글에 답글을 달려고하면 나의 답글은 원글 step 0에 +1을 한 값으로
+	  					 step 1을 지닌다. 나의 답글은 타인의 답글보다 늦게 작성되었으므로, 후순위로 밀려야하는데, 이 후순위를 replynum으로
+	  					 확인할 수 있다. 높을수록 더 최신에 작성된 글이다.
+	  	
+	답변글 처리 주의점: 답변글을 처리하는 컬럼이 3개 필요하다.(masterid, replynum, step))
+	 			   masterid 컬럼에 중복된 값이 있을 경우, replynum컬럼을 asc
+				   replynum이 중복된 값이 존재할때 step asc
+				   step이 중복된 값이 존재할때 id asc
+	   			   라고 설명해주셨지만 결국 masterid를 desc로 묶어서 인접하도록 정렬한 후에, step과 replynum으로 위에서 설명한 목적을 위해
+	   			   정렬해주면 된다. 그럼 왜 masterid는 desc냐고? 그래야 최신 글이 가장 위로 오기 때문이다
+    */
   				
-  */
-  				
-  rs = st.executeQuery(sql);
+	rs = st.executeQuery(sql);
   
-  // out.println(sql);
-  // if(true) return;	//프로그램 종료
-  if (!(rs.next()))  {
-   out.println("게시판에 올린 글이 없습니다");
-  } else {
-   do {
-	 //DB의 값을 가져와서 각각의 vector에 저장
-    keyid.addElement(new Integer(rs.getInt("id"))); // 가져온 로우값 묶음 rs에서 id컬럼의 값을 빼서 keyid 벡터에 저장함
-    name.addElement(rs.getString("name"));// 
-    email.addElement(rs.getString("email"));
-    String idate = rs.getString("inputdate");
-    idate = idate.substring(0,8);
-    inputdate.addElement(idate);
-    subject.addElement(rs.getString("subject"));
-    rcount.addElement(new Integer(rs.getInt("readcount")));
-    stepvec.addElement(new Integer(rs.getInt("step")));
+	// out.println(sql);
+	// if(true) return;	//프로그램 종료
+	if (!(rs.next()))  {
+	out.println("게시판에 올린 글이 없습니다");
+	} else {
+		do {
+	 		//DB의 값을 가져와서 각각의 vector에 저장
+		    keyid.addElement(new Integer(rs.getInt("id"))); // 가져온 로우값 묶음 rs에서 id컬럼의 값을 빼서 keyid 벡터에 저장함
+		    name.addElement(rs.getString("name"));// 
+		    email.addElement(rs.getString("email"));
+		    String idate = rs.getString("inputdate");
+		    idate = idate.substring(0,8);
+		    inputdate.addElement(idate);
+		    subject.addElement(rs.getString("subject"));
+		    rcount.addElement(new Integer(rs.getInt("readcount")));
+		    stepvec.addElement(new Integer(rs.getInt("step")));
     
-   }while(rs.next());
-   totalrows = name.size();	//name vector에 저장된 값의 갯수 ,총 레코드수
-   totalpages = (totalrows-1)/maxrows +1;
-   startrow = (where-1) * maxrows;		//현재 페이지에서 시작 레코드 번호
-   endrow = startrow+maxrows-1  ;		//현재 페이지의 마지막 레코드 번호
-   
-   
-   
-   if (endrow >= totalrows)
-    endrow=totalrows-1;
-  
-   
-   
-   totalgroup = (totalpages-1)/maxpages +1;
-   if (endpage > totalpages) 
-    endpage=totalpages;
+		}while(rs.next());
+   		totalrows = name.size();	//name vector에 저장된 값의 갯수 ,총 레코드수
+   		totalpages = (totalrows-1)/maxrows +1;
+   		startrow = (where-1) * maxrows;		//현재 페이지에서 시작 레코드 번호
+   		endrow = startrow+maxrows-1  ;		//현재 페이지의 마지막 레코드 번호
+		if (endrow >= totalrows)
+    		endrow=totalrows-1;
+	    totalgroup = (totalpages-1)/maxpages +1;
+   		if (endpage > totalpages) 
+    		endpage=totalpages;
 /*
    out.println("=== maxpage : 5 일때 =====" + "<p>");
    out.println ("현재 페이지 : " + where + "<p>");
@@ -233,20 +225,20 @@
     out.println("<TD>");
     int stepi= ((Integer)stepvec.elementAt(j)).intValue();
     int imgcount = j-startrow; 
-    if (stepi > 0 ) {
-     for(int count=0; count < stepi; count++)
-      out.print("&nbsp;&nbsp;");
-     out.println("<IMG name=icon"+imgcount+ " src=image/arrow.gif>");
-     out.print("<A href=freeboard_read.jsp?id=");
-     out.print(keyid.elementAt(j) + "&page=" + where );
-     out.print(" onmouseover=\"rimgchg(" + imgcount + ",1)\"");
-     out.print(" onmouseout=\"rimgchg(" + imgcount + ",2)\">");
-    } else {
-     out.println("<IMG name=icon"+imgcount+ " src=image/close.gif>");
-     out.print("<A href=freeboard_read.jsp?id=");
-     out.print(keyid.elementAt(j) + "&page=" + where );
-     out.print(" onmouseover=\"imgchg(" + imgcount + ",1)\"");
-     out.print(" onmouseout=\"imgchg(" + imgcount + ",2)\">");
+    if (stepi > 0 ) { // 답변글인 경우에 stepi가 0보다 큼
+	    for(int count=0; count < stepi; count++)
+	    	out.print("&nbsp;&nbsp;"); // 답글임을 시각적으로 표시하기 위해서 스텝 1단계마다 들여쓰기
+	    out.println("<IMG name=icon"+imgcount+ " src=image/arrow.gif>"); // 답변글인 경우에 화살표 처리
+	    out.print("<A href=freeboard_read.jsp?id="); // 하이퍼링크 처리 시작 부분 freeboard_read.jsp와 함께 아래의 
+	    out.print(keyid.elementAt(j) + "&page=" + where ); // 상세 페이지 및 위치를 함께 결합해서 불러온다. 
+	    out.print(" onmouseover=\"rimgchg(" + imgcount + ",1)\""); // 자바스크립트 함수 rimgchg : 답글 이미지 변환용
+	    out.print(" onmouseout=\"rimgchg(" + imgcount + ",2)\">"); // 오버.아웃에 따라 인자값 변화로 이미지 값이 바뀜
+    } else { // stepi가 0보다 크지 않다 -> 원본글이다
+	    out.println("<IMG name=icon"+imgcount+ " src=image/close.gif>");
+	    out.print("<A href=freeboard_read.jsp?id=");
+	    out.print(keyid.elementAt(j) + "&page=" + where );
+	    out.print(" onmouseover=\"imgchg(" + imgcount + ",1)\""); // 자바스크립트 함수 imgchg : 원글 이미지 변환용
+	    out.print(" onmouseout=\"imgchg(" + imgcount + ",2)\">"); // 오버.아웃에 따라 인자값 변화로 이미지 값이 바뀜
     }
     out.println(subject.elementAt(j) + "</TD>");
     out.println("<TD align=center>");
@@ -305,10 +297,10 @@
   </TR>
  </TABLE>-->
 
-<FORM method="post" name="msgsearch" action="freeboard_search.jsp">
+<FORM method="post" name="msgsearch" action="freeboard_search.jsp"> <!-- 폼 값을 액션으로 서치 파일로 던지기함 -->
 <TABLE border=0 width=600 cellpadding=0 cellspacing=0>
  <TR>
-  <TD align=right width="241"> 
+  <TD align=right width="241">  <!-- 여기서는 각 선택별 옵션 밸류만 건내주고, 옵션 밸류를 받은 서치파일에서 밸류별 실행을 함 -->
    <SELECT name=stype >
     <OPTION value=1 >닉네임
     <OPTION value=2 >제목
@@ -320,7 +312,7 @@
    </SELECT>
   </TD>
   <TD width="127" align="center">
-   <INPUT type=text size="17" name="sval" >
+   <INPUT type=text size="17" name="sval" > <!--  검색어를 sval로 받아서 서치 파일로 넘김 -->
   </TD>
   <TD width="115">&nbsp;<a href="#" onClick="check();"><img src="image/serach.gif" border="0" align='absmiddle'></A></TD>
   <TD align=right valign=bottom width="117"><A href="freeboard_write.html"><img src="image/write.gif" border="0"></TD>

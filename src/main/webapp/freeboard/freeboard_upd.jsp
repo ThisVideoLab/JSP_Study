@@ -8,22 +8,22 @@ function check() {
  with(document.msgwrite){			//document : 문서 전체, msgwrite : 이 문서의 form의 이름
   if(subject.value.length == 0){
    alert("제목을 입력해 주세요!!");
-   subject.focus();
+   subject.focus(); // subject 에 해당하는 가지고 있는 인풋 박스로 포커스 효과, 해당 인풋 박스 테두리가 볼드처리됨
    return false;					//return 값을 true로 하면 바로 submit으로 넘어가버림
   }
   if(name.value.length == 0){
    alert("이름을 입력해 주세요!!");
-   name.focus();
+   name.focus(); // name 에 해당하는 인풋 박스로 포커스 효과, 해당 인풋 박스 테두리가 볼드처리됨
    return false;
   }
   if(password.value.length == 0){
    alert("비밀번호를 입력해 주세요!!");
-   password.focus();
+   password.focus(); // 해당하는 인풋 박스로 포커스 효과, 해당 인풋 박스 테두리가 볼드처리됨
    return false;
   }
   if(content.value.length == 0){
    alert("내용을 입력해주세요!!");
-   content.focus();
+   content.focus(); //해당하는 인풋 박스로 포커스 효과, 해당 인풋 박스 테두리가 볼드처리됨
    return false;
   }
   document.msgwrite.submit();
@@ -57,6 +57,7 @@ function check() {
   } else {
 %>
 <FORM name="msgwrite" method=POST action="freeboard_upddb.jsp?id=<%=id%>&page=<%=p%>">
+								  <!-- 액션을 통해서 폼태그에서 나온 결과값을 db 수정 파일로 념겨줌, 이때 id 변수값 p페이지 변수값 중요 -->
  <table width="600" cellspacing="0" cellpadding="2" align = "center">
   <tr> 
    <td colspan="2" bgcolor="#1F4F8F" height="1"></td>
