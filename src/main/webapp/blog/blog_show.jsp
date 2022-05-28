@@ -116,8 +116,8 @@
 		//페이징 출력 부분 처리 
 		
 		if (wheregroup > 1){    //wheregroup > 1 이상일때 
-			out.println ("[ <A href= \"dbgb_show.jsp?go=1\"> 처음 </A> ]"); 
-			out.println ("[ <A href= \"dbgb_show.jsp?gogroup=" + priorgroup + "\"> 이전 </A> ]"); 
+			out.println ("[ <A href= \"blog_show.jsp?go=1\"> 처음 </A> ]"); 
+			out.println ("[ <A href= \"blog_show.jsp?gogroup=" + priorgroup + "\"> 이전 </A> ]"); 
 		}else {  
 			out.println ("[처음]");
 			out.println ("[이전]"); 
@@ -128,12 +128,12 @@
 			if (jj==where)
 				out.println("[" + jj + "]"); 
 			else 
-				out.println ("[<A href= \"dbgb_show.jsp?go="+jj+"\">" + jj + "</A>]"); 		
+				out.println ("[<A href= \"blog_show.jsp?go="+jj+"\">" + jj + "</A>]"); 		
 		}
 		
 		if (wheregroup < totalgroup){
-			out.println ("[ <A href= \"dbgb_show.jsp?gogroup=" + nextgroup + "\"> 다음 </A> ]"); 
-			out.println ("[ <A href= \"dbgb_show.jsp?gogroup=" + totalgroup + "\"> 마지막 </A> ]");
+			out.println ("[ <A href= \"blog_show.jsp?gogroup=" + nextgroup + "\"> 다음 </A> ]"); 
+			out.println ("[ <A href= \"blog_show.jsp?gogroup=" + totalgroup + "\"> 마지막 </A> ]");
 		} else {
 			out.println ("[다음]");
 			out.println ("[마지막]"); 
